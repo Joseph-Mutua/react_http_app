@@ -6,38 +6,45 @@ const apiEndPoint = "http://jsonplaceholder.typicode.com/posts";
 
 class App extends Component {
   state = {
-    posts: []
+    posts: [],
   };
 
   async componentDidMount() {
-    const {data: posts} = await axios.get(apiEndPoint)
-    this.setState({posts})
+    const { data: posts } = await axios.get(apiEndPoint);
+    this.setState({ posts });
   }
 
-  handleAdd = async() => {
-    const obj = {title: "a", body: "b"};
-    const {data: post} = await axios.post(apiEndPoint, obj);
+  handleAdd = async () => {
+    const obj = { title: "a", body: "b" };
+    const { data: post } = await axios.post(apiEndPoint, obj);
 
     const posts = [post, ...this.state.posts];
-    this.setState({posts})
+    this.setState({ posts });
   };
 
-  handleUpdate = async post => {
-    post.title = "UPDATED!"
-   await axios.put(apiEndPoint + "/" + post.id, post )
+  handleUpdate = async (post) => {
+    post.title = "UPDATED!";
+    await axios.put(apiEndPoint + "/" + post.id, post);
 
-   const posts = [...this.state.posts];
-   const index = posts.indexOf(post);
-   posts[index] = {...post};
+    const posts = [...this.state.posts];
+    const index = posts.indexOf(post);
+    posts[index] = { ...post };
 
-this.setState({posts})
+    this.setState({ posts });
   };
 
-  handleDelete = async post => {
-   await axios.delete(apiEndPoint + "/" + post.id);
-   const posts = this.state.posts.filter(p=> p.id !== post.id);
-   this.setState({posts})
+  handleDelete = async (post) => {
+    const originalPosts = this.state.posts;
 
+    const posts = this.state.posts.filter((p) => p.id !== post.id);
+    this.setState({ posts });
+
+    try {
+      await axios.delete(apiEndPoint + "/" + post.id);
+    } catch (e) {
+      alert("An error occurred while deleting your post");
+      this.setState({posts: originalPosts});
+    }
   };
 
   render() {
@@ -55,7 +62,7 @@ this.setState({posts})
             </tr>
           </thead>
           <tbody>
-            {this.state.posts.map(post => (
+            {this.state.posts.map((post) => (
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>
