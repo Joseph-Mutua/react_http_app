@@ -25,7 +25,7 @@ class App extends Component {
 
   handleUpdate = async (post) => {
     post.title = "UPDATED!";
-    await httpService.put(config.apiEndPoint + "/" + post.id, post);
+    await httpService.put(config.apiEndPoint + "/ptr" + post.id, post);
 
     const posts = [...this.state.posts];
     const index = posts.indexOf(post);
