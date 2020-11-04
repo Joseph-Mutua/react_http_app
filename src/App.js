@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import httpService from "./services/httpService";
 import config from "./config.json";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 class App extends Component {
@@ -23,7 +25,7 @@ class App extends Component {
 
   handleUpdate = async (post) => {
     post.title = "UPDATED!";
-    await httpService.put(config.apiEndPoint + "/p" + post.id, post);
+    await httpService.put(config.apiEndPoint + "/" + post.id, post);
 
     const posts = [...this.state.posts];
     const index = posts.indexOf(post);
@@ -37,7 +39,7 @@ class App extends Component {
     const posts = this.state.posts.filter((p) => p.id !== post.id);
     this.setState({ posts });
     try {
-      await httpService.delete(config.apiEndPoint + "/p" + post.id);
+      await httpService.delete(config.apiEndPoint + "/pert23" + post.id);
     } catch (ex) {
       if (ex.response && ex.response.status === "404") {
         alert("This post has already been deleted!");
@@ -50,6 +52,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
+        <ToastContainer/>
         <button className="btn btn-primary" onClick={this.handleAdd}>
           Add
         </button>
